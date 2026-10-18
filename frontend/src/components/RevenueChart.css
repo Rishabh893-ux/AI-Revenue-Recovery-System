@@ -1,0 +1,67 @@
+.revenue-chart {
+  padding: 24px 22px 12px;
+}
+
+.revenue-chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.revenue-chart-header h3 {
+  font-size: 1.05rem;
+}
+
+.revenue-chart-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 12px;
+  margin-right: 4px;
+}
+
+.legend-dot:first-child {
+  margin-left: 0;
+}
+
+.legend-total {
+  background: #6d5ce7;
+}
+
+.legend-recovered {
+  background: #2dd4bf;
+}
+
+.revenue-chart-tooltip {
+  background: var(--bg-raised);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 0.8rem;
+}
+
+.revenue-chart-tooltip-label {
+  color: var(--text-faint);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.revenue-chart-tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 2px 0;
+  color: var(--text);
+}

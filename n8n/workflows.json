@@ -1,0 +1,618 @@
+[
+  {
+    "id": "7rW4LNRFykoGPjfP",
+    "name": "AI Revenue Recovery - Abandoned Cart",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "abandoned-cart",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -400,
+          0
+        ],
+        "id": "21d4916e-a353-4e1f-a5bb-eff864f14d45",
+        "name": "Webhook",
+        "webhookId": "0280b389-763e-4c08-988e-eaa578b6c45f"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "c09c0201-45cf-491f-8c49-e00e20b2f92f",
+                "leftValue": "={{ $json.body.customer.email }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -150,
+          0
+        ],
+        "id": "b349d049-27f3-4167-a870-22070da816a4",
+        "name": "Has email?"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=You are an AI revenue recovery assistant for an e-commerce store called ReviveAI.\n\nCreate a short, personalized abandoned-cart recovery message.\n\nCustomer name: {{ $('Webhook').item.json.body.customer.name }}\nCart total: ₹{{ $('Webhook').item.json.body.totalAmount }}\n\nThe customer left items in their cart without completing checkout. Mention the cart total and encourage them to come back and complete the purchase.\n\nWrite a message that:\n- Addresses the customer by name.\n- Sounds friendly and helpful, and is not pushy.\n- Is under 80 words.\n- Is plain text (no markdown, no subject line, no placeholders like [link]).\n\nReturn only the message that should be sent to the customer.",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          100,
+          -100
+        ],
+        "id": "3299c995-ef8d-4471-8933-39cbb3c3f4b8",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1.1,
+        "position": [
+          100,
+          120
+        ],
+        "id": "f25d8511-da70-450c-b616-351b1fb6fca7",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "OcPR1aL7F3Z3Aibd",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "sendTo": "={{ $('Webhook').item.json.body.customer.email }}",
+          "subject": "You left something in your cart 🛒",
+          "emailType": "text",
+          "message": "={{ $json.output }}",
+          "options": {
+            "appendAttribution": false
+          }
+        },
+        "type": "n8n-nodes-base.gmail",
+        "typeVersion": 2.2,
+        "position": [
+          450,
+          -100
+        ],
+        "id": "58ab3a74-480d-4af0-a5d8-7ef69c137d9b",
+        "name": "Send a message",
+        "webhookId": "ef7ef9c6-6eba-491a-94ff-425db25a0e39",
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "ZY331VLXwwKyHTPE",
+            "name": "Gmail account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "tableId": "agent_actions",
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "cart_id",
+                "fieldValue": "={{ $('Webhook').item.json.body.cartId }}"
+              },
+              {
+                "fieldId": "customer_name",
+                "fieldValue": "={{ $('Webhook').item.json.body.customer.name }}"
+              },
+              {
+                "fieldId": "amount",
+                "fieldValue": "={{ $('Webhook').item.json.body.totalAmount }}"
+              },
+              {
+                "fieldId": "problem",
+                "fieldValue": "Abandoned Cart"
+              },
+              {
+                "fieldId": "ai_action",
+                "fieldValue": "Email Recovery"
+              },
+              {
+                "fieldId": "status",
+                "fieldValue": "Pending"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          700,
+          -100
+        ],
+        "id": "0173dcca-51dc-46ac-8c5b-aafbf2ffeca9",
+        "name": "Log recovery action",
+        "credentials": {
+          "supabaseApi": {
+            "id": "c613UBpyTuAZWHmG",
+            "name": "Supabase account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Has email?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Has email?": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Send a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send a message": {
+        "main": [
+          [
+            {
+              "node": "Log recovery action",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "d91dec41-a214-4ed2-9fa2-dd6e246da811",
+    "tags": []
+  },
+  {
+    "id": "RevAIfailedPay01",
+    "name": "AI Revenue Recovery - Failed Payment",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "failed-payment",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -400,
+          0
+        ],
+        "id": "b6104731-a746-4b23-951a-8b6629bd1ab4",
+        "name": "Webhook",
+        "webhookId": "c024832a-1ce7-43fa-8d00-69044cdb493d"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "tableId": "carts",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "id",
+                "keyValue": "={{ $json.body.cartId }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -200,
+          0
+        ],
+        "id": "2db82d2e-444d-451e-95b8-ef01f8f47af1",
+        "name": "Get cart",
+        "credentials": {
+          "supabaseApi": {
+            "id": "c613UBpyTuAZWHmG",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "24b21785-d787-4832-8630-496a797d93d9",
+                "leftValue": "={{ $json.customer_email }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          0,
+          0
+        ],
+        "id": "89a47b6a-92c3-487c-98c1-ac6f84366fff",
+        "name": "Has email?"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=You are an AI revenue recovery assistant for an e-commerce store called ReviveAI.\n\nA customer's payment just failed. Write a short, reassuring message.\n\nCustomer name: {{ $('Get cart').item.json.customer_name }}\nCart total: ₹{{ $('Get cart').item.json.total_amount }}\nFailure reason (for your context only, rephrase simply if useful): {{ $('Webhook').item.json.body.reason || 'unknown' }}\n\nExplain that their payment didn't go through, that this happens sometimes, that no order was placed, and invite them to retry whenever they're ready.\n\nWrite a message that:\n- Addresses the customer by name.\n- Sounds friendly and helpful, and is not pushy.\n- Is under 80 words.\n- Is plain text (no markdown, no subject line, no placeholders like [link]).\n\nReturn only the message that should be sent to the customer.",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          250,
+          -100
+        ],
+        "id": "aa82a9d6-22ba-478d-bbce-c46205d71f84",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1.1,
+        "position": [
+          250,
+          120
+        ],
+        "id": "12e93673-7b5e-47ac-8662-e6beaba381f3",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "OcPR1aL7F3Z3Aibd",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "sendTo": "={{ $('Get cart').item.json.customer_email }}",
+          "subject": "Your payment didn't go through — want to try again?",
+          "emailType": "text",
+          "message": "={{ $json.output }}",
+          "options": {
+            "appendAttribution": false
+          }
+        },
+        "type": "n8n-nodes-base.gmail",
+        "typeVersion": 2.2,
+        "position": [
+          600,
+          -100
+        ],
+        "id": "6116acaa-fa4b-4c3e-a968-2fe3cf260b5d",
+        "name": "Send a message",
+        "webhookId": "6fe85cb7-7bf8-4346-ac26-7c0ccd123604",
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "ZY331VLXwwKyHTPE",
+            "name": "Gmail account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "tableId": "agent_actions",
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "cart_id",
+                "fieldValue": "={{ $('Get cart').item.json.id }}"
+              },
+              {
+                "fieldId": "customer_name",
+                "fieldValue": "={{ $('Get cart').item.json.customer_name }}"
+              },
+              {
+                "fieldId": "amount",
+                "fieldValue": "={{ $('Get cart').item.json.total_amount }}"
+              },
+              {
+                "fieldId": "problem",
+                "fieldValue": "Payment Failed"
+              },
+              {
+                "fieldId": "ai_action",
+                "fieldValue": "Email Recovery"
+              },
+              {
+                "fieldId": "status",
+                "fieldValue": "Pending"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          850,
+          -100
+        ],
+        "id": "f40264d7-613c-4491-97cb-14c5816c930e",
+        "name": "Log recovery action",
+        "credentials": {
+          "supabaseApi": {
+            "id": "c613UBpyTuAZWHmG",
+            "name": "Supabase account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Get cart",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get cart": {
+        "main": [
+          [
+            {
+              "node": "Has email?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Has email?": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Send a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send a message": {
+        "main": [
+          [
+            {
+              "node": "Log recovery action",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "b548bb39-0caa-4a41-8dfa-507d63729521",
+    "tags": []
+  },
+  {
+    "id": "RevAIabandonChk1",
+    "name": "AI Revenue Recovery - Abandonment Check",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "minutes",
+                "minutesInterval": 15
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -400,
+          0
+        ],
+        "id": "0a149313-6206-4a62-999e-7323572df56c",
+        "name": "Every 15 minutes"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "carts",
+          "returnAll": true,
+          "filterType": "string",
+          "filterString": "=status=eq.active&updated_at=lt.{{ $now.toUTC().minus({ minutes: 30 }).toFormat(\"yyyy-MM-dd'T'HH:mm:ss'Z'\") }}"
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -150,
+          0
+        ],
+        "id": "0739f041-b07a-46c8-99c6-4cd7fddbf453",
+        "name": "Find stale active carts",
+        "credentials": {
+          "supabaseApi": {
+            "id": "c613UBpyTuAZWHmG",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://host.docker.internal:5000/api/webhooks/cart-abandoned",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={ \"cartId\": \"{{ $json.id }}\" }",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          100,
+          0
+        ],
+        "id": "12c1cb97-1a51-4946-b379-cc7c8e5a07f7",
+        "name": "Mark cart abandoned",
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "RevAIbackendHdr1",
+            "name": "ReviveAI backend"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Every 15 minutes": {
+        "main": [
+          [
+            {
+              "node": "Find stale active carts",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Find stale active carts": {
+        "main": [
+          [
+            {
+              "node": "Mark cart abandoned",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "6d2c3641-cd88-4cc9-9c96-f1bbae00c5a9",
+    "tags": []
+  }
+]

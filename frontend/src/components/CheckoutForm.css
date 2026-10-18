@@ -1,0 +1,24 @@
+.checkout-form {
+  padding: 26px;
+}
+
+.checkout-form h3 {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.checkout-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.checkout-form-grid .field:first-child {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 560px) {
+  .checkout-form-grid {
+    grid-template-columns: 1fr;
+  }
+}

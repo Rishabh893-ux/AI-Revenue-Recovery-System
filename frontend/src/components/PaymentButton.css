@@ -1,0 +1,32 @@
+.payment-button-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.payment-btn {
+  padding: 14px 22px;
+  font-size: 1rem;
+}
+
+.payment-btn-spin {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.payment-btn-error {
+  color: var(--rose);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .payment-btn-spin {
+    animation: none;
+  }
+}

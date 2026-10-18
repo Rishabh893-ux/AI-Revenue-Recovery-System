@@ -1,0 +1,59 @@
+.dashboard-page {
+  padding: 44px 24px 96px;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.dashboard-header h1 {
+  font-size: 1.7rem;
+  margin-bottom: 8px;
+}
+
+.dashboard-header p {
+  color: var(--text-dim);
+  font-size: 0.92rem;
+}
+
+.dashboard-mock-badge {
+  font-size: 0.78rem;
+  color: var(--amber);
+  background: rgba(245, 165, 36, 0.12);
+  border: 1px solid rgba(245, 165, 36, 0.28);
+  padding: 6px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.dashboard-table-heading {
+  margin: 32px 0 16px;
+}
+
+.dashboard-table-heading h2 {
+  font-size: 1.2rem;
+}
+
+@media (max-width: 1080px) {
+  .dashboard-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

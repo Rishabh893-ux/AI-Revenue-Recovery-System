@@ -1,0 +1,39 @@
+.spinner-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 40px 20px;
+}
+
+.spinner-pulse {
+  width: 120px;
+  height: 40px;
+  stroke-dasharray: 220;
+  stroke-dashoffset: 220;
+  animation: pulse-draw 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse-draw {
+  0% {
+    stroke-dashoffset: 220;
+  }
+  60% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -220;
+  }
+}
+
+.spinner-label {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner-pulse {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}

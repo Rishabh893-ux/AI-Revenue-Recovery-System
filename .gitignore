@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+build/
+coverage/
+
+# Environment files: real secrets live here. Only the .example templates are committed.
+.env
+.env.*
+!.env.example
+*.local
+
+# n8n local data / backups (contain encrypted credentials and execution data)
+.n8n/
+n8n-data/
+n8n-backup*/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editors and OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.sw?
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Tunnels
+ngrok.yml

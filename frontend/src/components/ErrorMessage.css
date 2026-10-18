@@ -1,0 +1,31 @@
+.error-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px 20px;
+  border-color: rgba(245, 85, 108, 0.35);
+}
+
+.error-icon {
+  color: var(--rose);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.error-copy h4 {
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.error-copy p {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.error-retry {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+}

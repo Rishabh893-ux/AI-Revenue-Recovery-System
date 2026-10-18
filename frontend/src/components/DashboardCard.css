@@ -1,0 +1,55 @@
+.dashboard-card {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dashboard-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dashboard-card-label {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+
+.dashboard-card-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-strong);
+  color: var(--indigo-soft);
+}
+
+.tone-positive .dashboard-card-icon {
+  color: var(--pulse);
+  background: var(--pulse-soft);
+}
+
+.tone-warning .dashboard-card-icon {
+  color: var(--amber);
+  background: rgba(245, 165, 36, 0.14);
+}
+
+.tone-negative .dashboard-card-icon {
+  color: var(--rose);
+  background: rgba(245, 85, 108, 0.14);
+}
+
+.dashboard-card-value {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.dashboard-card-trend {
+  font-size: 0.78rem;
+  color: var(--text-faint);
+}

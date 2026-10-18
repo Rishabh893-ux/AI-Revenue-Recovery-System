@@ -1,0 +1,74 @@
+.recovery-table {
+  overflow: hidden;
+}
+
+.recovery-table-scroll {
+  overflow-x: auto;
+}
+
+.recovery-table table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+.recovery-table thead th {
+  text-align: left;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-faint);
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.recovery-table tbody td {
+  padding: 14px 20px;
+  font-size: 0.86rem;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.recovery-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.recovery-table tbody tr:hover {
+  background: var(--surface);
+}
+
+.recovery-table-mono {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.recovery-table-date {
+  color: var(--text-faint);
+  font-size: 0.8rem;
+}
+
+.recovery-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.status-recovered {
+  background: var(--pulse-soft);
+  color: var(--pulse);
+}
+
+.status-pending {
+  background: rgba(245, 165, 36, 0.14);
+  color: var(--amber);
+}
+
+.status-lost {
+  background: rgba(245, 85, 108, 0.14);
+  color: var(--rose);
+}

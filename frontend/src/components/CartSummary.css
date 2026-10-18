@@ -1,0 +1,31 @@
+.cart-summary {
+  padding-top: 16px;
+}
+
+.cart-summary-note {
+  font-size: 0.8rem;
+  color: var(--pulse);
+  background: var(--pulse-soft);
+  border: 1px solid rgba(45, 212, 191, 0.25);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 14px;
+}
+
+.cart-summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  padding: 7px 0;
+}
+
+.cart-summary-total {
+  border-top: 1px solid var(--border);
+  margin-top: 6px;
+  padding-top: 14px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  font-family: var(--font-display);
+}
