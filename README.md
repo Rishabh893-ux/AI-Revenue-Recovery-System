@@ -10,6 +10,8 @@ ReviveAI is a demo e-commerce store with Razorpay checkout and an AI system that
 ![n8n](https://img.shields.io/badge/n8n-Workflows-EA4B71?logo=n8n&logoColor=white)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
+![ReviveAI revenue recovery dashboard](docs/screenshots/dashboard.png)
+
 ## Features
 
 - **Storefront and checkout:** product catalog, cart drawer, and checkout form, paid through Razorpay Checkout.
@@ -20,23 +22,29 @@ ReviveAI is a demo e-commerce store with Razorpay checkout and an AI system that
 - **Recovery tracking:** each email is logged as `Pending` and switches to `Recovered` when the customer pays.
 - **Dashboard:** total and recovered revenue, recovery rate, failed payments, abandoned carts, a revenue chart, and a recovery activity table.
 
+## Screenshots
+
+| Storefront | Products |
+|---|---|
+| ![Storefront home page](docs/screenshots/home.png) | ![Product catalog](docs/screenshots/products.png) |
+| **Cart** | **Checkout** |
+| ![Cart drawer](docs/screenshots/cart.png) | ![Checkout with Razorpay](docs/screenshots/checkout.png) |
+
+<p align="center">
+  <img src="docs/screenshots/mobile.png" alt="Mobile view of the storefront" width="280">
+  <br><em>Responsive on mobile</em>
+</p>
+
+The dashboard at the top of this page shows demo data.
+
 ## How it works
 
-```
- Shopper ──► React storefront ──► Express backend ──► Supabase (Postgres)
-                                    │      ▲
-                     create order / │      │ payment.captured / payment.failed
-                     verify payment ▼      │ (signed webhook)
-                                    Razorpay
+![ReviveAI architecture](docs/architecture.svg)
 
- n8n "Abandonment Check" (every 15 min)
-   └─► finds idle carts in Supabase ──► POST /api/webhooks/cart-abandoned
-                                              │
- backend ──► n8n "Abandoned Cart" / "Failed Payment" workflow
-               └─► Gemini writes the email ──► Gmail sends it ──► logged in agent_actions (Pending)
-
- Customer comes back and pays ──► backend marks their actions "Recovered" ──► dashboard
-```
+1. **Checkout:** the storefront saves the cart and the customer's details. The backend prices the order and creates a Razorpay order.
+2. **Detection:** every 15 minutes, n8n's *Abandonment Check* finds carts left idle for 30+ minutes and tells the backend to mark them abandoned. A failed payment is reported straight away.
+3. **Recovery:** the backend notifies the matching n8n workflow. Gemini writes a personal email, Gmail sends it, and the action is logged as `Pending`.
+4. **Credit:** if the customer comes back and pays, the backend switches their actions to `Recovered` and the dashboard updates.
 
 - **Frontend:** talks only to the backend and never holds a secret.
 - **Backend:** holds the Razorpay and Supabase secrets. It never calls Gemini itself; it pings n8n and lets the workflows decide what to send.
@@ -62,8 +70,9 @@ ReviveAI is a demo e-commerce store with Razorpay checkout and an AI system that
 │   └── src/data/catalog.js   server-side product prices (source of truth)
 ├── n8n/
 │   └── workflows.json        the 3 recovery workflows (no secrets)
-└── supabase/
-    └── schema.sql            database tables
+├── supabase/
+│   └── schema.sql            database tables
+└── docs/                     screenshots and architecture diagram
 ```
 
 ## Getting started

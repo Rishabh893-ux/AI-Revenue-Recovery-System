@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" width="1000" height="520" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif">
+  <title>ReviveAI architecture</title>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8b7cf6"/>
+    </marker>
+    <marker id="t" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2dd4bf"/>
+    </marker>
+    <style>
+      .box { fill: #171726; stroke: #34345a; stroke-width: 1.5; }
+      .ai { fill: #10231f; stroke: #2dd4bf; stroke-width: 1.5; }
+      .t { fill: #ececf5; font-size: 15px; font-weight: 600; }
+      .s { fill: #9a9ab5; font-size: 12px; }
+      .l { fill: #b9b2fb; font-size: 11.5px; }
+      .lt { fill: #7fe8d8; font-size: 11.5px; }
+      .p { stroke: #8b7cf6; stroke-width: 1.8; fill: none; }
+      .pt { stroke: #2dd4bf; stroke-width: 1.8; fill: none; }
+    </style>
+  </defs>
+
+  <rect width="1000" height="520" rx="18" fill="#0d0d16"/>
+
+  <!-- Top row -->
+  <rect class="box" x="24" y="40" width="140" height="60" rx="12"/>
+  <text class="t" x="94" y="67" text-anchor="middle">Shopper</text>
+  <text class="s" x="94" y="86" text-anchor="middle">browser</text>
+
+  <rect class="box" x="224" y="40" width="180" height="60" rx="12"/>
+  <text class="t" x="314" y="67" text-anchor="middle">React storefront</text>
+  <text class="s" x="314" y="86" text-anchor="middle">Vite · :5173</text>
+
+  <rect class="box" x="470" y="40" width="180" height="60" rx="12"/>
+  <text class="t" x="560" y="67" text-anchor="middle">Express backend</text>
+  <text class="s" x="560" y="86" text-anchor="middle">Node · :5000</text>
+
+  <rect class="box" x="752" y="40" width="200" height="60" rx="12"/>
+  <text class="t" x="852" y="67" text-anchor="middle">Supabase</text>
+  <text class="s" x="852" y="86" text-anchor="middle">Postgres · RLS</text>
+
+  <path class="p" d="M164,70 H220" marker-end="url(#a)"/>
+  <path class="p" d="M404,70 H466" marker-end="url(#a)"/>
+  <text class="l" x="435" y="60" text-anchor="middle">REST</text>
+  <path class="p" d="M650,70 H748" marker-end="url(#a)"/>
+  <text class="l" x="699" y="60" text-anchor="middle">read / write</text>
+
+  <!-- Razorpay -->
+  <rect class="box" x="470" y="170" width="180" height="56" rx="12"/>
+  <text class="t" x="560" y="196" text-anchor="middle">Razorpay</text>
+  <text class="s" x="560" y="214" text-anchor="middle">checkout · test mode</text>
+  <path class="p" d="M540,100 V166" marker-end="url(#a)"/>
+  <path class="p" d="M580,170 V104" marker-end="url(#a)"/>
+  <text class="l" x="534" y="140" text-anchor="end">create order</text>
+  <text class="l" x="534" y="154" text-anchor="end">verify signature</text>
+  <text class="l" x="588" y="140">signed webhook</text>
+  <text class="l" x="588" y="154">paid → Recovered</text>
+
+  <!-- n8n container -->
+  <rect x="200" y="280" width="610" height="205" rx="16" fill="none" stroke="#4a3f8f" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <text class="s" x="218" y="304" font-weight="600" fill="#b9b2fb">n8n (Docker)</text>
+
+  <rect class="box" x="220" y="325" width="170" height="54" rx="12"/>
+  <text class="t" x="305" y="349" text-anchor="middle">Abandonment Check</text>
+  <text class="s" x="305" y="367" text-anchor="middle">every 15 min</text>
+
+  <rect class="box" x="420" y="325" width="170" height="54" rx="12"/>
+  <text class="t" x="505" y="349" text-anchor="middle">Abandoned Cart</text>
+  <text class="s" x="505" y="367" text-anchor="middle">workflow</text>
+
+  <rect class="box" x="420" y="408" width="170" height="54" rx="12"/>
+  <text class="t" x="505" y="432" text-anchor="middle">Failed Payment</text>
+  <text class="s" x="505" y="450" text-anchor="middle">workflow</text>
+
+  <rect class="ai" x="620" y="325" width="170" height="54" rx="12"/>
+  <text class="t" x="705" y="349" text-anchor="middle">AI Agent</text>
+  <text class="s" x="705" y="367" text-anchor="middle" fill="#7fe8d8">Google Gemini</text>
+
+  <rect class="ai" x="620" y="408" width="170" height="54" rx="12"/>
+  <text class="t" x="705" y="432" text-anchor="middle">Gmail</text>
+  <text class="s" x="705" y="450" text-anchor="middle" fill="#7fe8d8">send email</text>
+
+  <!-- Customer inbox -->
+  <rect class="ai" x="846" y="408" width="130" height="54" rx="12"/>
+  <text class="t" x="911" y="432" text-anchor="middle">Customer</text>
+  <text class="s" x="911" y="450" text-anchor="middle" fill="#7fe8d8">recovery email</text>
+
+  <!-- Abandonment check → backend -->
+  <path class="p" d="M305,325 V120 H500 V104" marker-end="url(#a)"/>
+  <text class="l" x="312" y="200">idle carts →</text>
+  <text class="l" x="312" y="214">/cart-abandoned</text>
+
+  <!-- Backend → workflows -->
+  <path class="p" d="M650,88 H700 V300 H505 V321" marker-end="url(#a)"/>
+  <text class="l" x="708" y="200">notify n8n</text>
+  <text class="l" x="708" y="214">(webhook)</text>
+
+  <!-- Workflows → AI → Gmail → customer -->
+  <path class="pt" d="M590,352 H616" marker-end="url(#t)"/>
+  <path class="pt" d="M590,435 H605 V362 H616" marker-end="url(#t)"/>
+  <path class="pt" d="M705,379 V404" marker-end="url(#t)"/>
+  <path class="pt" d="M790,435 H842" marker-end="url(#t)"/>
+
+  <!-- Log back to Supabase -->
+  <path class="pt" d="M790,352 H880 V104" marker-end="url(#t)"/>
+  <text class="lt" x="888" y="200">log action</text>
+  <text class="lt" x="888" y="214">(Pending)</text>
+</svg>
